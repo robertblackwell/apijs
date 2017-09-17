@@ -11,6 +11,8 @@ const RpcUser = require('./js/managers/mixins/rpc_user');
 const RpcDev = require('./js/managers/mixins/rpc_dev');
 const RpcApi = require('./js/managers/rpc_manager');
 
+const JqueryRequest = require('./js/managers/jquery_request_manager'); 
+
 const Configuration = require('./js/configuration');
 
 
@@ -34,4 +36,5 @@ module.exports = {
 	Rest : Rest,
 	Rpc : Rpc,
 	Configuration : Configuration,
+	JqueryRequest : JqueryRequest,
 }
