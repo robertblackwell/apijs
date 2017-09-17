@@ -1,6 +1,6 @@
 /* eslint indent: 0 */
 /* eslint no-unused-vars : 0 */
-const NetworkManager = require('managers/network_manager');
+const NetworkManager = require('../network_manager');
 const Tracker = require('./tracker');
 /**
  * This class provides some of the requirements for Api functional mixins
