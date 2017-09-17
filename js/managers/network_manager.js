@@ -1,8 +1,8 @@
 /* eslint indent: 0 */
 const querystring = require('querystring');
-const errorHandler = require('managers/error_manager');
+const errorHandler = require('./error_manager');
 const ResponseModel = require('../response_model');
-const requestManagerFactory = require("request_manager_factory");
+const requestManagerFactory = require("./request_manager_factory");
 
 let responseModel = new ResponseModel();
 

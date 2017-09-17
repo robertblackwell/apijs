@@ -3,8 +3,8 @@
 /**
  * Just a switch to select the desired api REST or RPC
  */
-const RpcManager = require('managers/rpc_manager');
-const RestManager =require('managers/rest_manager');
+const RpcManager = require('./rpc_manager');
+const RestManager =require('./rest_manager');
 /**
  * Dynamic inheritence
  * 

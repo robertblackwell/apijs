@@ -12,14 +12,14 @@ const merge = require('webpack-merge');
 let common = require('./common.js');
 common.entry = [];
 const local = {
-	node: {fs: 'empty'},
+	node: {fs: 'empty', 'net' : 'empty', 'tls' : 'empty', 'url' : 'empty'},
 	resolve :{
 		alias:{
 			node_request_manager : path.resolve(dirs.js, 'managers/node_request_manager_empty'),
 		}
-	}
-}
+	},
 
+}
 const config = merge(common, local);
 
 module.exports = config;

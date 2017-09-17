@@ -3,7 +3,11 @@
 /**
  * Just a switch to select the desired api REST or RPC
  */
-const JqueryRequestManager = require('managers/jquery_request_manager');
+const JqueryRequestManager = require('jquery_request_manager');
+//
+//  This next statement is allowing for 'node_request_module' to be an 
+//  alias in a webpack config
+//
 const NodeRequestManager = require('node_request_manager');
 /**
  * A factory function to create the appropriate type of RequestManager.

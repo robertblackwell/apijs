@@ -65,6 +65,18 @@ Y.task('y', 'install yake from MyTools', [], ()=>
 	Y.exec("cp -Rv /Users/rob/MyTools/yake /Users/rob/Sites/whiteacorn/ctl/node_modules/ ");
 })
 /**************************************************************************************************
+* Tasks related to versions and publishing
+ ***************************************************************************************************/
+Y.task('publish', 'increment patch version, commit, push and publish', ()=>
+{
+	Y.exec(`npm version patch`);
+	Y.exec(`git status`);
+	Y.exec(`git add -A`);
+	Y.exec(`git commit -a -m'auto commit'`);
+	Y.exec(`git push origin master`);
+	Y.exec(`npm publish`);
+})
+/**************************************************************************************************
  * Tasks related to testing
  ***************************************************************************************************/
 const nodeBundleName = 'api_node_bundle.js';
