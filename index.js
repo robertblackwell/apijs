@@ -26,7 +26,7 @@ const Rpc = {
 	Base : RpcBase,
 	Raw : RpcRaw,
 	User : RpcUser,
-	Dev : RpcDev
+	Dev : RpcDev,
 	Api : RpcApi
 }
 
