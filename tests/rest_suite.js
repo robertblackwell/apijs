@@ -107,10 +107,19 @@ function RestTestSuite()
 }
 RestTestSuite.prototype.run = function(initialConfig)
 {
-	let cfg = Object.assign({}, initialConfig, {apiType: "REST"});
+	let cfg;
+	let cf;
 
-	var cf = new Configuration(cfg);
-	var trest = new RestTestSuiteOne("API+REST+JSON", cf.amend({apiType: "REST"}));
+	cfg = Object.assign({}, initialConfig, {
+		apiType: "REST",
+		apiConstructor : function(config) {
+			return new RestManager(config);
+		}
+	} );
+
+	cf = new Configuration(cfg);
+
+	var trest = new RestTestSuiteOne("API+REST+JSON", cf);
 	trest.run();
 }
 

@@ -8,4 +8,7 @@ module.exports = new Configuration({
 	 */
 	tokenInHeader : false,
 	postSendJson: false,
+	requestConstructor : function(config) {
+		return new JqueryRequestManager(config);
+	}
 });

@@ -30,6 +30,9 @@ function NodeRequestManager(cfg)
             headers: headers,
             // proxy: "http://localhost:8888"
         };
+        if (config.proxy !== undefined)
+            options.proxy = config.proxy;
+
         if( ["POST", "PUT", "PATCH", "DELETE"].includes(method)) {
             //
             // The data has already been jsonized before it gets here

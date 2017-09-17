@@ -1,15 +1,6 @@
 /* eslint indent: 0 */
 
 /**
- * Just a switch to select the desired api REST or RPC
- */
-const JqueryRequestManager = require('jquery_request_manager');
-//
-//  This next statement is allowing for 'node_request_module' to be an 
-//  alias in a webpack config
-//
-const NodeRequestManager = require('node_request_manager');
-/**
  * A factory function to create the appropriate type of RequestManager.
  * 
  * There are two RequestManager's possible:
@@ -46,22 +37,6 @@ const NodeRequestManager = require('node_request_manager');
  */
 module.exports = function requestManagerFactory(cfg)
 {
-    const defaultCfg = {
-        requestType : "JQUERY_REQUEST", 
-    }
-    const config = Object.assign({}, defaultCfg, cfg);
-
-
-    if ( config.requestType === "JQUERY_REQUEST") {
-    	const jqueryRequestManager = new JqueryRequestManager(config);
-        return jqueryRequestManager;
-
-    } else if (config.requestType === "NODE_REQUEST") {
-    	const nodeRequestManager = new NodeRequestManager(config);
-        return nodeRequestManager;
-    } else {
-    	throw(`requestManagerFactory invalid requestType value in config : ${config.requestType}`);
-    }
-
+    return cfg.requestConstructor(cfg);
 }
 

@@ -67,17 +67,25 @@ function RpcTestSuite()
 }
 RpcTestSuite.prototype.run = function(initialConfig)
 {
-	let cfg = Object.assign({}, initialConfig, {apiType: "RPC"});
+	let cfg;
+	let cf;
 
-	var cf = new Configuration(cfg);
+	cfg = Object.assign({}, initialConfig, {
+		apiType: "RPC",
+		apiConstructor : function(config) {
+			return new RpcManager(config);
+		}
+	} );
 
-	var trpc = new RpcTestSuiteOne("API+RPC+JSON",cf.amend({apiType: "RPC", postSendJson:true, tokenInHeader: true}));
+	cf = new Configuration(cfg);
+
+	var trpc = new RpcTestSuiteOne("API+RPC+JSON",cf.amend({postSendJson:true, tokenInHeader: true}));
 	trpc.run();
 
-	var tRpcNoSendJson = new RpcTestSuiteOne("API+RPC+NOTJSON", cf.amend({apiType:"RPC", postSendJson:false, tokenInHeader: true}));
+	var tRpcNoSendJson = new RpcTestSuiteOne("API+RPC+NOTJSON+H", cf.amend({postSendJson:false, tokenInHeader: true}));
 	tRpcNoSendJson.run();
 
-	var tNoCORS = new RpcTestSuiteOne("API+RPC+NOTJSON", cf.amend({apiType:"RPC", postSendJson:false, tokenInHeader: false}));
+	var tNoCORS = new RpcTestSuiteOne("API+RPC+NOTJSON+NOTH", cf.amend({postSendJson:false, tokenInHeader: false}));
 	tNoCORS.run();
 }
 module.exports = RpcTestSuite;

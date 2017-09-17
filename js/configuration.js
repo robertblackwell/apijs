@@ -20,11 +20,13 @@
  * @class      Configuration (name)
  * @param      {<type>}  options  The options
  * 
+ * 
  * Configuration for the sample app is set in the config/{sysmode}.config.js file
  * 
  */
 function Configuration(options)
 {
+
 	const defaultOptions = {
 		sysMode		: 'LOCAL', // possible values LOCAL | STAGE | PROD
 		requestType : 'JQUERY_REQUEST',   // possible values JQUERY | NODE
@@ -35,11 +37,43 @@ function Configuration(options)
 
 	const newOptions = Object.assign({}, defaultOptions, options);
 
-	this.configProperties = ['apiUrl', 'requestType', 'apiType', 'postSendJson', 'tokenInHeader'];
+	this.configProperties = [
+		'apiUrl', 
+		//
+		// these next two cannot be amended and there is no default value
+		// actual values MUST be provided
+		//
+		'requestType', 			// redundant as the requestConstructor superceeds
+		'requestConstructor',	// a closure that constructs the required request manager
+		
+		//
+		// these next two cannot be amended and there is no default value
+		// actual values MUST be provided
+		//
+		'apiType', 		
+		'apiConstructor',		// a closure that constructs a suitable api manager
+
+		'postSendJson', 
+		'tokenInHeader',
+		'proxy'
+	];
 
 	this.options = newOptions;
 
-	this.configValues = {};
+	if (this.options.requestConstructor === undefined) {
+		throw Error(`Configuration::constructor requestConstructor must not be undefined`);
+	}
+
+	if (this.options.apiConstructor === undefined) {
+		throw Error(`Configuration::constructor apiConstructor must not be undefined`);
+	}
+
+	this.configValues = {
+		requestConstructor : newOptions.requestConstructor,
+		apiConstructor : newOptions.apiConstructor,
+	};
+	if (newOptions.proxy !== undefined)
+		this.configValues.proxy = newOptions.proxy;
 	/**
 	 * base url for the api is http://{sysmode}.api.stapp
 	 */
@@ -105,6 +139,12 @@ function Configuration(options)
 
 		for( let p of this.configProperties) {
 			if (newValues.hasOwnProperty(p)) {
+				if (p === 'requestType') {
+					throw Error('Configuration::amend cannot amend requestType');
+				}
+				if (p === 'requestConstructor') {
+					throw Error('Configuration::amend cannot amend requestConstructor');
+				}
 				obj.configValues[p] = newValues[p];
 			}
 		}

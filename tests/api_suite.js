@@ -186,21 +186,37 @@ function ApiTestSuite()
 }
 ApiTestSuite.prototype.run = function(initialConfig)
 {
-	const cfg = Object.assign({}, initialConfig, {apiType: "RPC"} );
+	let cfg;
+	let cf;
 
-	var cf = new Configuration(cfg);
-	var trest = new ApiTestSuiteOneCombination("API+REST+JSON", cf.amend({apiType: "REST"}));
+	cfg = Object.assign({}, initialConfig, {
+		apiType: "REST",
+		apiConstructor : function(config) {
+			return new RestManager(config);
+		}
+	} );
 
-	var trest = new ApiTestSuiteOneCombination("API+REST+JSON", cf.amend({apiType: "REST"}));
+	cf = new Configuration(cfg);
+
+	var trest = new ApiTestSuiteOneCombination("API+REST+JSON", cf);
 	trest.run();
 
-	var trpc = new ApiTestSuiteOneCombination("API+RPC+JSON",cf.amend({apiType: "RPC", postSendJson:true, tokenInHeader: true}));
+
+	cfg = Object.assign({}, initialConfig, {
+		apiType: "RPC",
+		apiConstructor : function(config) {
+			return new RpcManager(config);
+		}
+	} );
+
+	cf = new Configuration(cfg);
+	var trpc = new ApiTestSuiteOneCombination("API+RPC+JSON",cf.amend({postSendJson:true, tokenInHeader: true}));
 	trpc.run();
 
-	var tRpcNoSendJson = new ApiTestSuiteOneCombination("API+RPC+NOTJSON", cf.amend({apiType:"RPC", postSendJson:false, tokenInHeader: true}));
+	var tRpcNoSendJson = new ApiTestSuiteOneCombination("API+RPC+NOTJSON+HDR", cf.amend({postSendJson:false, tokenInHeader: true}));
 	tRpcNoSendJson.run();
 
-	var tNoCORS = new ApiTestSuiteOneCombination("API+RPC+NOTJSON", cf.amend({apiType:"RPC", postSendJson:false, tokenInHeader: false}));
+	var tNoCORS = new ApiTestSuiteOneCombination("API+RPC+NOTJSON+NOT_HDR", cf.amend({postSendJson:false, tokenInHeader: false}));
 	tNoCORS.run();
 }
 module.exports = ApiTestSuite;
