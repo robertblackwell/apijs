@@ -1,17 +1,17 @@
 
-const RestBase = require('js/managers/mixins/rest_base');
-const RestRaw = require('js/managers/mixins/rest_raw');
-const RestUser = require('js/managers/mixins/rest_user');
-const RestDev = require('js/managers/mixins/rest_dev');
-const RestApi = require('js/managers/rest_manager');
+const RestBase = require('./js/managers/mixins/rest_base');
+const RestRaw = require('./js/managers/mixins/rest_raw');
+const RestUser = require('./js/managers/mixins/rest_user');
+const RestDev = require('./js/managers/mixins/rest_dev');
+const RestApi = require('./js/managers/rest_manager');
 
-const RpcBase = require('js/managers/mixins/rpc_base');
-const RpcRaw = require('js/managers/mixins/rpc_raw');
-const RpcUser = require('js/managers/mixins/rpc_user');
-const RpcDev = require('js/managers/mixins/rpc_dev');
-const RpcApi = require('js/managers/rpc_manager');
+const RpcBase = require('./js/managers/mixins/rpc_base');
+const RpcRaw = require('./js/managers/mixins/rpc_raw');
+const RpcUser = require('./js/managers/mixins/rpc_user');
+const RpcDev = require('./js/managers/mixins/rpc_dev');
+const RpcApi = require('./js/managers/rpc_manager');
 
-const Configuration = require('js/configuration');
+const Configuration = require('./js/configuration');
 
 
 const Rest = {
