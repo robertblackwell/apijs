@@ -1,0 +1,118 @@
+#!/usr/bin/env node
+const path = require('path')
+const webpack = require('webpack');
+const dirs = require('./config/dirs');
+const Y = require('yake');
+
+
+Y.task('default', 'build all bundles, js and css', ['build-css', 'build-js'] , function(){})
+Y.task('clean', 'clean all bundles',['clean-js', 'clean-css'], () =>{})
+
+function wpCmd(config, entry, outputPath){
+	const cmd = `./node_modules/.bin/webpack --config ${config} ${entry} ${outputPath}`;
+	return cmd;
+}
+
+Y.task('build-js', 'bundle all js', [], ()=>
+{
+	const cmd = wpCmd('./config/webpack.config.js', './js/main.js', './dist/bundle.js');
+
+	Y.exec(cmd);
+})
+
+Y.task('watch-js', 'watch js files', ['build-js'], ()=> 
+{
+	Y.watch("./js", "build-js");
+})
+
+Y.task('clean-js', 'clean all js', [], ()=>
+{
+	const files = "./dist/*.js*";
+	Y.exec(`rm -rf ${files}`);
+})
+
+const masterLess = './style/less/master.less';
+const cssBundle = './dist/bundle.css';
+const cssBundledMinified = './dist/bundle.min.css';
+
+Y.task('watch-less', 'watch all files and rebuild on change', ['build-css'], () => 
+{
+	Y.watch('./style/less', "build-css");
+});
+
+Y.task('build-css', 'bundle all css', ['lessc', 'cssMini'], ()=>{})
+
+Y.task('clean-css', 'clean all css build products', [], ()=>
+{
+	const files1 = "./dist/*.css";
+	Y.exec(`rm -rf ${files1}`);
+})
+
+Y.task('lessc','compile local less files to single css' ,[], ()=>
+{
+	const cmd = `./node_modules/.bin/lessc ${masterLess} ${cssBundle}`;
+	Y.exec(cmd);
+})
+
+Y.task('cssMini','compress the bundled css files into one ./dist/bundle.min.css MINIFIED', ['lessc'], ()=>
+{
+	const cmd = `./node_modules/.bin/cleancss -o ${cssBundledMinified} ${cssBundle} `;	
+	Y.exec(cmd);	
+})
+
+Y.task('y', 'install yake from MyTools', [], ()=>
+{
+	Y.exec("cp -Rv /Users/rob/MyTools/yake /Users/rob/Sites/whiteacorn/ctl/node_modules/ ");
+})
+/**************************************************************************************************
+ * Tasks related to testing
+ ***************************************************************************************************/
+const nodeBundleName = 'api_node_bundle.js';
+const nodeBundlePath = path.resolve(dirs.test_bundles, nodeBundleName);
+const browserBundleName = 'api_browser_bundle.js';
+const browserBundlePath = path.resolve(dirs.test_bundles, browserBundleName);
+
+function execWpCmd(env)
+{
+	const config = path.resolve(dirs.config, `${env}_test.js`);
+	const entry = path.resolve(dirs.tests, `api_${env}.js`);
+	const outputPath = path.resolve(dirs.test_bundles, `api_${env}_bundle.js`);
+	const cmd = `./node_modules/.bin/webpack --config ${config} ${entry} ${outputPath}`;
+	Y.exec(cmd);
+}
+
+Y.task('test_clean', "tests - clean all bundles", function(){
+	Y.exec(`rm -rfv ${dirs.test_bundles}/*`)
+});
+
+Y.task('test_watch', "tests - watch test js and rerun tests", function(){
+	Y.watch(`${dirs.tests}/*.js`, "test");
+});
+
+Y.task('test_api_node_bundle', 'test.api - bundle for node', [], ()=> {
+	execWpCmd("node");
+});
+
+Y.task('test_api_node_run', 'test api - run node test', ['test_api_node_bundle'], ()=> {
+	Y.exec(`node ${nodeBundlePath} | faucet`);
+});
+
+Y.task('test_api_node', 'test api - bundle & run for node', ['test_api_node_run'], ()=> {
+ 
+}) 
+
+Y.task('test_api_browser_bundle', 'test api - bundle for browsers', [], ()=> {
+	execWpCmd("browser");
+});
+
+Y.task('test_api_browser_run', 'test api - run headless browser test', ['test_api_browser_bundle'], ()=> {
+	Y.exec(`cat ${browserBundlePath} | tape-run | faucet`);
+});
+
+Y.task('test_api_browser', 'test api - bundle for browsers and run for headless browser', ['test_api_browser_run'], ()=> {
+ 
+});
+
+Y.task('test', 'test_api - both browser and node', ['test_clean', 'test_api_node', 'test_api_browser'], ()=>{})
+
+Y.run();
