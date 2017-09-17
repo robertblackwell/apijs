@@ -69,11 +69,11 @@ Y.task('y', 'install yake from MyTools', [], ()=>
  ***************************************************************************************************/
 Y.task('publish', 'increment patch version, commit, push and publish', ()=>
 {
-	Y.exec(`npm version patch`);
 	Y.exec(`git status`);
 	Y.exec(`git add -A`);
 	Y.exec(`git commit -a -m'auto commit'`);
 	Y.exec(`git push origin master`);
+	Y.exec(`npm version patch`);
 	Y.exec(`npm publish`);
 })
 /**************************************************************************************************
