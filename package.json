@@ -1,6 +1,6 @@
 {
   "name": "stapp-apijs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Building blocks to call to the Stapp server (https://github.com/robertblackwell/stapp-server) from js using either a REST or a JsonRpc interface ",
   "main": "index.js",
   "scripts": {
